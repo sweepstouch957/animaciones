@@ -1,4 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "outputDirectory": "site"
+  "rewrites": [
+    { "source": "/", "destination": "/Sweepstouch%20Explainer.dc.html" }
+  ]
 }
