@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<script src="./image-slot.js"></script>
+<style>
+html,body{margin:0;padding:0;background:#f3f1f4;-webkit-font-smoothing:antialiased;}
+*{box-sizing:border-box;}
+a{color:#E6007E;text-decoration:none;}a:hover{color:#b8006a;}
+input::placeholder{color:#9a95a0;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+@keyframes floatY{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-8px) rotate(-6deg)}}
+@keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(230,0,126,.55),0 18px 40px rgba(230,0,126,.35)}50%{box-shadow:0 0 0 8px rgba(230,0,126,0),0 18px 48px rgba(230,0,126,.5)}}
+@keyframes shimmer{0%{transform:translateX(-120%) skewX(-20deg)}100%{transform:translateX(320%) skewX(-20deg)}}
+@keyframes pop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+@keyframes wiggle{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(6deg)}}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes toastIn{from{opacity:0;transform:translate(-50%,16px)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes phoneGlow{0%{opacity:0;transform:scale(.6)}30%{opacity:1}100%{opacity:0;transform:scale(1.6)}}
+@keyframes confetti{0%{opacity:0;transform:translate(0,0) rotate(0) scale(.5)}20%{opacity:1}100%{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(var(--rot)) scale(1)}}
+@keyframes burst{0%{transform:scale(.4);opacity:.9}100%{transform:scale(3.2);opacity:0}}
+@keyframes ptsUp{0%{opacity:0;transform:translateY(4px) scale(.7)}25%{opacity:1;transform:translateY(-2px) scale(1.1)}100%{opacity:0;transform:translateY(-14px) scale(1)}}
+@keyframes tapPulse{0%{transform:scale(1)}40%{transform:scale(1.25)}100%{transform:scale(1)}}
+@keyframes sparkle{0%{opacity:0;transform:rotate(var(--r)) translateY(0) scale(.4)}40%{opacity:1}100%{opacity:0;transform:rotate(var(--r)) translateY(-16px) scale(1)}}
+</style>
+</helmet>
+
+<div style="min-height:100vh;display:flex;justify-content:center;font-family:Poppins,system-ui,sans-serif;color:#111;">
+<div style="width:100%;max-width:430px;background:#fff;min-height:100vh;position:relative;overflow:hidden;padding-bottom:40px;">
+
+  <!-- Header -->
+  <div style="display:flex;align-items:center;gap:12px;padding:16px 16px 8px;animation:fadeUp .5s ease both;">
+    <div style="background:#FFE500;border-radius:999px;padding:8px 14px;display:flex;flex-direction:column;align-items:center;line-height:1;box-shadow:0 4px 12px rgba(0,0,0,.12);flex-shrink:0;">
+      <div style="font-weight:800;font-size:17px;letter-spacing:-.5px;color:#111;">FINE<span style="color:#E6007E;">✿</span>FARE</div>
+      <div style="font-size:8px;font-weight:600;color:#111;margin-top:2px;">Supermarkets</div>
+    </div>
+    <div style="flex:1;min-width:0;">
+      <div style="font-weight:700;font-size:15px;color:#1a0f2e;">Fine Fare Supermarket</div>
+      <div style="font-size:11.5px;color:#6b6479;">{{ t.tagline }}</div>
+    </div>
+    <div style="display:flex;background:#fff;border:1.5px solid #e9e4ee;border-radius:999px;padding:3px;flex-shrink:0;">
+      <button onClick="{{ setEn }}" style="border:0;border-radius:999px;padding:6px 12px;font:600 11px Poppins,sans-serif;cursor:pointer;background:{{ enBg }};color:{{ enFg }};transition:all .25s;">EN</button>
+      <button onClick="{{ setEs }}" style="border:0;border-radius:999px;padding:6px 12px;font:600 11px Poppins,sans-serif;cursor:pointer;background:{{ esBg }};color:{{ esFg }};transition:all .25s;">ES</button>
+    </div>
+    <button onClick="{{ toggleMenu }}" aria-label="Menu" style="border:0;background:none;padding:6px;cursor:pointer;display:flex;flex-direction:column;gap:5px;">
+      <span style="width:22px;height:2.5px;background:#111;border-radius:2px;display:block;"></span>
+      <span style="width:22px;height:2.5px;background:#111;border-radius:2px;display:block;"></span>
+      <span style="width:22px;height:2.5px;background:#111;border-radius:2px;display:block;"></span>
+    </button>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:14px;padding:10px 14px 0;">
+
+    <!-- FEATURED: Make Your List -->
+    <div onClick="{{ openList }}" style="position:relative;border-radius:22px;overflow:hidden;min-height:372px;background:#0d0a12;cursor:pointer;animation:fadeUp .6s .1s ease both, glow 2.6s 1s ease-in-out infinite;border:2px solid #E6007E;transform:translateZ(0);" style-active="transform:scale(.985)">
+      <div style="position:absolute;inset:0;"><image-slot id="bg-list" shape="rect" placeholder="Drop photo: grocery bag + veggies"></image-slot></div>
+      <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,6,14,.96) 0%,rgba(10,6,14,.82) 42%,rgba(10,6,14,.25) 100%);pointer-events:none;"></div>
+      <div style="position:absolute;inset:0;background:radial-gradient(circle at 85% 15%,rgba(230,0,126,.35),transparent 45%);pointer-events:none;"></div>
+      <div style="position:absolute;top:0;left:0;width:40%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);animation:shimmer 4s 1.5s ease-in-out infinite;pointer-events:none;"></div>
+
+      <div style="position:absolute;top:14px;left:16px;background:#FFE500;color:#111;font-weight:800;font-size:10px;letter-spacing:1.5px;padding:5px 10px;border-radius:999px;text-transform:uppercase;pointer-events:none;animation:pop .5s .8s ease both;">{{ t.list.badge }}</div>
+
+      <div style="position:relative;padding:52px 18px 20px;width:60%;pointer-events:none;">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#E6007E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
+        <div style="color:#FF3D9C;font-weight:600;font-size:12px;letter-spacing:1.5px;margin-top:8px;">{{ t.list.kicker }}</div>
+        <div style="color:#fff;font-weight:800;font-size:34px;line-height:1;margin-top:2px;">{{ t.list.t1 }}</div>
+        <div style="color:#E6007E;font-weight:800;font-size:34px;line-height:1;">{{ t.list.t2 }}</div>
+        <div style="color:#f0eaf2;font-size:13px;margin-top:10px;line-height:1.4;">{{ t.list.body }}</div>
+        <div style="margin-top:16px;display:inline-flex;align-items:center;gap:10px;background:#E6007E;color:#fff;font-weight:700;font-size:14px;padding:13px 22px;border-radius:999px;box-shadow:0 8px 20px rgba(230,0,126,.45);">{{ t.list.cta }} <span style="display:inline-block;transition:transform .2s;">→</span></div>
+      </div>
+
+      <div style="position:absolute;right:12px;top:62px;width:152px;height:290px;pointer-events:none;">{{ phoneFx }}</div>
+      <!-- phone mockup -->
+      <div style="position:absolute;right:12px;top:62px;width:152px;height:290px;background:#111;border-radius:22px;border:5px solid #2a2530;box-shadow:0 22px 50px rgba(0,0,0,.6);animation:floatY 4s ease-in-out infinite;overflow:hidden;pointer-events:none;">
+        <div style="background:#f7f5f8;height:100%;padding:12px 7px 0;display:flex;flex-direction:column;position:relative;">
+          <div style="height:4px;width:30px;background:#111;border-radius:4px;margin:-6px auto 7px;flex-shrink:0;"></div>
+          <div style="display:flex;align-items:center;gap:4px;flex-shrink:0;">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#E6007E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></svg>
+            <div style="font-weight:800;font-size:10px;color:#111;">{{ t.list.previewTitle }}</div>
+            <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#E6007E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+          </div>
+          <div style="font-size:6.5px;font-weight:700;color:#E6007E;margin-top:2px;flex-shrink:0;transition:all .3s;">{{ previewSelected }}</div>
+          <div style="flex:1;overflow:hidden;margin-top:6px;padding-bottom:28px;"><div style="display:flex;flex-direction:column;gap:5px;transform:translateY({{ previewShift }});transition:transform .5s cubic-bezier(.2,.8,.2,1);">
+            <sc-for list="{{ previewItems }}" as="p" hint-placeholder-count="4">
+              <div style="background:#fff;border-radius:7px;border:1px solid {{ p.border }};overflow:hidden;transition:border-color .3s;box-shadow:0 1px 3px rgba(0,0,0,.05);">
+                <div style="display:flex;align-items:center;gap:5px;padding:5px 6px;">
+                  <div style="flex:1;min-width:0;">
+                    <div style="font-weight:800;font-size:7.5px;color:#111;line-height:1.1;">{{ p.name }}</div>
+                    <div style="font-size:4.5px;color:#6b6479;margin-top:1px;">{{ t.list.previewSub }}</div>
+                    <div style="display:flex;align-items:baseline;gap:3px;margin-top:2px;"><span style="font-weight:800;font-size:9px;color:#111;">{{ p.price }}</span><span style="font-size:5px;color:#111;">/lb</span><span style="font-size:6px;color:#9a95a0;text-decoration:line-through;">{{ p.old }}</span></div>
+                  </div>
+                  <div style="position:relative;width:15px;height:15px;flex-shrink:0;">
+                    <div style="position:absolute;inset:0;">{{ p.fx }}</div>
+                    <div style="position:relative;width:15px;height:15px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:{{ p.bg }};border:1.5px solid {{ p.ring }};transition:all .3s;animation:{{ p.anim }};">
+                      <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="{{ p.tick }}" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" style="transition:stroke .3s;"><path d="M20 6 9 17l-5-5"/></svg>
+                    </div>
+                  </div>
+                </div>
+                <div style="display:{{ p.saveDisp }};align-items:center;justify-content:space-between;background:#f7f5f8;border-top:1px solid #eee9f0;padding:3px 6px;">
+                  <div style="font-weight:800;font-size:7px;color:#E6007E;">{{ p.save }}</div>
+                  <div style="display:flex;align-items:center;gap:3px;font-size:5px;color:#444;">{{ t.list.previewQty }}
+                    <span style="width:9px;height:9px;border-radius:50%;border:1px solid #ccc;display:inline-flex;align-items:center;justify-content:center;font-size:6px;line-height:1;">−</span><b style="font-size:6px;color:#111;">1</b><span style="width:9px;height:9px;border-radius:50%;border:1px solid #111;display:inline-flex;align-items:center;justify-content:center;font-size:6px;line-height:1;">+</span>
+                  </div>
+                </div>
+              </div>
+            </sc-for>
+          </div></div>
+          <div style="position:absolute;left:0;right:0;bottom:0;background:#fff;box-shadow:0 -4px 12px rgba(0,0,0,.08);padding:5px 7px 6px;display:flex;align-items:center;justify-content:space-between;">
+            <div><div style="font-size:5px;color:#111;font-weight:600;">{{ t.list.previewSavings }}</div><div style="font-weight:800;font-size:11px;color:#E6007E;line-height:1.1;transition:all .3s;">{{ previewTotal }}</div></div>
+            <div style="border:1px solid #E6007E;border-radius:999px;padding:3px 6px;font-size:5.5px;font-weight:800;color:#111;display:flex;align-items:center;gap:2px;animation:{{ ptsAnim }};">{{ previewPts }} <span style="font-weight:600;">pts</span> <span style="color:#E6007E;">›</span></div>
+          </div>
+        </div>
+      </div>
+      <div style="position:absolute;right:16px;top:12px;font-family:Caveat,cursive;font-weight:700;color:#fff;font-size:19px;line-height:1;text-align:center;transform:rotate(-6deg);pointer-events:none;">{{ t.list.script }}<div style="height:3px;width:60px;background:#E6007E;border-radius:2px;margin:4px auto 0;"></div></div>
+    </div>
+
+    <!-- Standard cards -->
+    <sc-for list="{{ cards }}" as="c" hint-placeholder-count="4">
+      <div onClick="{{ c.onTap }}" style="position:relative;border-radius:22px;overflow:hidden;min-height:214px;background:#0d0a12;cursor:pointer;animation:fadeUp .6s ease both;animation-delay:{{ c.delay }};box-shadow:0 10px 30px rgba(0,0,0,.18);transform:translateZ(0);" style-active="transform:scale(.985)">
+        <div style="position:absolute;inset:0;"><image-slot id="{{ c.slotId }}" shape="rect" placeholder="{{ c.slotHint }}"></image-slot></div>
+        <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,6,14,.94) 0%,rgba(10,6,14,.72) 40%,rgba(10,6,14,.15) 62%,rgba(10,6,14,0) 100%);pointer-events:none;"></div>
+        <div style="position:relative;padding:20px 18px;width:64%;pointer-events:none;">
+          <div style="color:#E6007E;">{{ c.icon }}</div>
+          <div style="color:#FF3D9C;font-weight:600;font-size:11.5px;letter-spacing:1.5px;margin-top:6px;">{{ c.kicker }}</div>
+          <div style="color:#fff;font-weight:800;font-size:27px;line-height:1;margin-top:2px;">{{ c.t1 }}</div>
+          <div style="color:#E6007E;font-weight:800;font-size:27px;line-height:1;">{{ c.t2 }}</div>
+          <div style="color:#efe9f1;font-size:12.5px;margin-top:8px;line-height:1.4;">{{ c.body }}</div>
+          <div style="margin-top:14px;display:inline-flex;align-items:center;gap:10px;background:#E6007E;color:#fff;font-weight:700;font-size:13px;padding:11px 20px;border-radius:999px;box-shadow:0 8px 20px rgba(230,0,126,.4);">{{ c.cta }} <span>→</span></div>
+        </div>
+      </div>
+    </sc-for>
+
+    <!-- Stay Updated -->
+    <div style="border-radius:22px;background:#fff;border:1.5px solid #f3d3e4;padding:20px 18px;box-shadow:0 10px 30px rgba(230,0,126,.08);animation:fadeUp .6s .7s ease both;">
+      <div style="display:flex;gap:14px;align-items:flex-start;">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#E6007E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:4px;"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+        <div>
+          <div style="font-weight:800;font-size:24px;line-height:1.1;color:#111;">{{ t.form.t1 }} <span style="color:#E6007E;">{{ t.form.t2 }}</span></div>
+          <div style="font-size:12px;color:#6b6479;margin-top:4px;line-height:1.4;">{{ t.form.body }}</div>
+        </div>
+      </div>
+      <sc-if value="{{ notSubscribed }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:16px;">
+          <input value="{{ name }}" onChange="{{ onName }}" placeholder="{{ t.form.name }}" style="width:100%;border:1.5px solid #e6e0ea;border-radius:12px;padding:12px 14px;font:500 14px Poppins,sans-serif;outline:none;color:#111;background:#fff;" style-focus="border-color:#E6007E;box-shadow:0 0 0 3px rgba(230,0,126,.15)">
+          <input value="{{ phone }}" onChange="{{ onPhone }}" placeholder="(555) 123-4567" inputMode="tel" style="width:100%;border:1.5px solid {{ phoneBorder }};border-radius:12px;padding:12px 14px;font:500 14px Poppins,sans-serif;outline:none;color:#111;background:#fff;" style-focus="border-color:#E6007E;box-shadow:0 0 0 3px rgba(230,0,126,.15)">
+          <div style="font-size:11px;color:{{ phoneHintColor }};text-align:right;margin-top:-4px;">{{ phoneHint }}</div>
+          <button onClick="{{ submit }}" style="border:0;background:#E6007E;color:#fff;font:700 15px Poppins,sans-serif;padding:14px;border-radius:999px;cursor:pointer;display:flex;justify-content:center;align-items:center;gap:10px;box-shadow:0 8px 20px rgba(230,0,126,.35);transition:transform .15s;" style-active="transform:scale(.97)">{{ t.form.cta }} <span>→</span></button>
+        </div>
+      </sc-if>
+      <sc-if value="{{ subscribed }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:16px;background:#fff0f7;border-radius:14px;padding:16px;display:flex;align-items:center;gap:12px;animation:pop .45s ease both;">
+          <div style="width:36px;height:36px;border-radius:50%;background:#E6007E;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+          <div style="font-weight:600;font-size:13px;color:#111;line-height:1.4;">{{ t.form.done }}</div>
+        </div>
+      </sc-if>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:12px;padding:14px 10px 0;animation:fadeUp .6s .8s ease both;">
+      <div style="flex:1;height:1px;background:#e2dde6;"></div>
+      <div style="font-size:10px;letter-spacing:3px;color:#6b6479;font-weight:500;white-space:nowrap;">{{ t.footer }}</div>
+      <div style="flex:1;height:1px;background:#e2dde6;"></div>
+    </div>
+    <div style="height:3px;width:60px;background:#E6007E;border-radius:2px;margin:-4px auto 0;"></div>
+  </div>
+
+  <!-- Share FAB -->
+  <button onClick="{{ share }}" aria-label="Share" style="position:fixed;right:max(16px, calc(50% - 215px + 16px));bottom:22px;width:56px;height:56px;border-radius:50%;border:0;background:#E6007E;color:#fff;cursor:pointer;box-shadow:0 10px 26px rgba(230,0,126,.45);display:flex;align-items:center;justify-content:center;animation:pop .5s 1s ease both;transition:transform .15s;z-index:5;" style-active="transform:scale(.92)">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>
+  </button>
+
+
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- Menu -->
+  <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ toggleMenu }}" style="position:fixed;inset:0;background:rgba(10,6,14,.5);z-index:20;animation:fadeIn .25s ease both;"></div>
+    <div style="position:fixed;top:0;right:max(0px, calc(50% - 215px));height:100%;width:270px;background:#fff;z-index:21;padding:24px 22px;display:flex;flex-direction:column;gap:6px;animation:fadeIn .3s ease both;box-shadow:-10px 0 40px rgba(0,0,0,.25);">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        <div style="font-weight:800;font-size:18px;">Fine Fare</div>
+        <button onClick="{{ toggleMenu }}" style="border:0;background:#f3f1f4;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:18px;">×</button>
+      </div>
+      <sc-for list="{{ menuItems }}" as="m" hint-placeholder-count="5">
+        <div onClick="{{ m.onTap }}" style="padding:14px 12px;border-radius:12px;font-weight:600;font-size:15px;color:#111;cursor:pointer;display:flex;justify-content:space-between;" style-hover="background:#fff0f7;color:#E6007E">{{ m.label }} <span style="color:#E6007E;">→</span></div>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;left:50%;bottom:92px;transform:translateX(-50%);background:#111;color:#fff;font-weight:600;font-size:13px;padding:12px 18px;border-radius:999px;z-index:30;box-shadow:0 10px 30px rgba(0,0,0,.35);animation:toastIn .3s ease both;white-space:nowrap;">{{ toast }}</div>
+  </sc-if>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:430,&quot;height&quot;:932}}">
+const I18N = {
+  en: {
+    tagline: 'Good food. Greater savings.',
+    list: { badge: 'Start here', kicker: 'SHOP SMARTER', t1: 'MAKE', t2: 'YOUR LIST', body: 'Plan your shopping and save more.', cta: 'Start My List', script: 'A Smarter Way to Shop', previewTitle: 'Your list', previewSub: 'Offer price and savings per unit.', previewQty: 'Quantity', previewSave: 'Save', previewSavings: 'Your estimated savings', previewSelected: 'selected' },
+    cards: [
+      { kicker: 'FRESH SAVINGS', t1: 'VIP', t2: 'DEALS', body: "Today's exclusive offers just for you.", cta: 'View Deals', script: 'Fresh Food Brighter Days' },
+      { kicker: 'EXPLORE & SAVE', t1: 'WEEKLY', t2: 'CIRCULAR', body: "Browse this week's deals and special offers.", cta: 'View Circular', script: 'Real Deals Real Savings' },
+      { kicker: 'EARN MORE', t1: 'POINTS &', t2: 'REWARDS', body: 'Complete a quick survey and get closer to amazing rewards.', cta: 'See Rewards', script: 'Small Steps Big Rewards' },
+      { kicker: 'ENTER TO WIN', t1: 'SWEEP-', t2: 'STAKES', body: 'Join our latest sweepstakes for a chance to win amazing prizes.', cta: 'Enter Now', script: 'Shop Participate Win!' },
+    ],
+    form: { t1: 'Stay', t2: 'Updated!', body: 'Be the first to know about exclusive offers, promotions and more.', name: 'Full Name', phoneReq: 'US phone required', phoneBad: 'Enter a valid 10-digit US number', cta: 'Sign Me Up', done: "You're in! We'll text you the best deals." },
+    footer: 'GOOD FOOD. BRIGHTER DAYS.',
+    sheet: { title: 'My List', add: 'Add an item…', done: 'All set — happy shopping!', progress: (a, b) => `${a} of ${b} in the cart` },
+    menu: ['Make Your List', 'VIP Deals', 'Weekly Circular', 'Points & Rewards', 'Sweepstakes'],
+    soon: 'Opening', shared: 'Link copied!',
+  },
+  es: {
+    tagline: 'Buena comida. Más ahorros.',
+    list: { badge: 'Empieza aquí', kicker: 'COMPRA INTELIGENTE', t1: 'HAZ', t2: 'TU LISTA', body: 'Planifica tu compra y ahorra más.', cta: 'Crear mi lista', script: 'Una forma más inteligente', previewTitle: 'Tu lista', previewSub: 'Precio de oferta y ahorro por unidad.', previewQty: 'Cantidad', previewSave: 'Ahorra', previewSavings: 'Tu ahorro estimado', previewSelected: 'seleccionados' },
+    cards: [
+      { kicker: 'AHORROS FRESCOS', t1: 'OFERTAS', t2: 'VIP', body: 'Ofertas exclusivas de hoy solo para ti.', cta: 'Ver ofertas', script: 'Comida fresca Días mejores' },
+      { kicker: 'EXPLORA Y AHORRA', t1: 'CIRCULAR', t2: 'SEMANAL', body: 'Mira las ofertas y especiales de esta semana.', cta: 'Ver circular', script: 'Ofertas reales Ahorros reales' },
+      { kicker: 'GANA MÁS', t1: 'PUNTOS Y', t2: 'PREMIOS', body: 'Completa una breve encuesta y acércate a grandes premios.', cta: 'Ver premios', script: 'Pequeños pasos Grandes premios' },
+      { kicker: 'PARTICIPA Y GANA', t1: 'SOR-', t2: 'TEOS', body: 'Únete a nuestros sorteos y gana premios increíbles.', cta: 'Participar', script: 'Compra Participa ¡Gana!' },
+    ],
+    form: { t1: 'Mantente', t2: '¡al día!', body: 'Sé el primero en conocer ofertas exclusivas, promociones y más.', name: 'Nombre completo', phoneReq: 'Teléfono de EE. UU. requerido', phoneBad: 'Ingresa un número válido de 10 dígitos', cta: 'Registrarme', done: '¡Listo! Te enviaremos las mejores ofertas.' },
+    footer: 'BUENA COMIDA. DÍAS MEJORES.',
+    sheet: { title: 'Mi Lista', add: 'Agregar producto…', done: '¡Todo listo — feliz compra!', progress: (a, b) => `${a} de ${b} en el carrito` },
+    menu: ['Haz tu lista', 'Ofertas VIP', 'Circular semanal', 'Puntos y premios', 'Sorteos'],
+    soon: 'Abriendo', shared: '¡Enlace copiado!',
+  },
+};
+const ICONS = {
+  tag: '<path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L2 12V2h10l8.6 8.6a2 2 0 0 1 0 2.8Z"/><circle cx="7.5" cy="7.5" r="1.5"/>',
+  book: '<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>',
+  coins: '<ellipse cx="9" cy="6" rx="7" ry="3"/><path d="M2 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6"/><path d="M2 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/>',
+  ticket: '<path d="M3 8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v1a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4Z"/><path d="M13 6v12"/>',
+};
+const DEFAULT_ITEMS = [
+  { id: 1, name: 'Bananas', emoji: '🍌', done: true }, { id: 2, name: 'Milk', emoji: '🥛', done: true },
+  { id: 3, name: 'Eggs', emoji: '🥚', done: false }, { id: 4, name: 'Chicken', emoji: '🍗', done: false },
+  { id: 5, name: 'Tomatoes', emoji: '🍅', done: false },
+];
+const EMOJI = [['banana','🍌'],['milk','🥛'],['egg','🥚'],['chicken','🍗'],['tomat','🍅'],['bread','🍞'],['pan','🍞'],['apple','🍎'],['manzana','🍎'],['rice','🍚'],['arroz','🍚'],['cheese','🧀'],['queso','🧀'],['water','💧'],['agua','💧'],['coffee','☕'],['café','☕'],['meat','🥩'],['carne','🥩'],['fish','🐟'],['avocado','🥑'],['aguacate','🥑'],['onion','🧅'],['cebolla','🧅']];
+
+class Component extends DCLogic {
+  state = { lang: 'en', listOpen: false, menuOpen: false, toast: '', items: DEFAULT_ITEMS, newItem: '', name: '', phone: '', phoneErr: false, subscribed: false, previewTick: 0 };
+  componentDidMount() {
+    try { const s = JSON.parse(localStorage.getItem('ff-list-state') || 'null'); if (s) this.setState({ items: s.items || DEFAULT_ITEMS, lang: s.lang || 'en' }); } catch (e) {}
+    this.timer = setInterval(() => this.setState(s => ({ previewTick: s.previewTick + 1 })), 1500);
+  }
+  componentWillUnmount() { clearInterval(this.timer); }
+  persist() { try { localStorage.setItem('ff-list-state', JSON.stringify({ items: this.state.items, lang: this.state.lang })); } catch (e) {} }
+  showToast(msg) { clearTimeout(this.tt); this.setState({ toast: msg }); this.tt = setTimeout(() => this.setState({ toast: '' }), 1800); }
+  icon(k) { return React.createElement('svg', { width: 30, height: 30, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round', dangerouslySetInnerHTML: { __html: ICONS[k] } }); }
+  renderVals() {
+    const { lang, items, previewTick } = this.state;
+    const t = I18N[lang];
+    const en = lang === 'en';
+    const soon = (label) => () => this.showToast(`${t.soon} ${label}…`);
+    const slots = ['bg-deals', 'bg-circular', 'bg-rewards', 'bg-sweeps'];
+    const hints = ['Drop photo: fresh peppers & tomatoes', 'Drop photo: weekly circular flyer', 'Drop photo: gift box, watch & coins', 'Drop photo: raffle drum with tickets'];
+    const iconKeys = ['tag', 'book', 'coins', 'ticket'];
+    const cards = t.cards.map((c, i) => ({ ...c, slotId: slots[i], slotHint: hints[i], icon: this.icon(iconKeys[i]), delay: `${0.25 + i * 0.12}s`, onTap: soon(c.t1 + ' ' + c.t2) }));
+    const PV = [{ name: 'Beef Oxtail', price: 6.99, old: 8.74 }, { name: 'Regular Beef Trip', price: 2.69, old: 3.36 }, { name: 'Chicken Wings', price: 1.99, old: 2.49 }, { name: 'Whole Chicken', price: 1.59, old: 1.99 }, { name: 'Pork Chops', price: 3.49, old: 4.29 }, { name: 'Ground Beef', price: 4.99, old: 5.99 }];
+    // tap sequence: 0,1 then skip 2, tap 3, skip 4, tap 5, hold, reset
+    const SEQ = [0, 1, 3, 5];
+    const step = previewTick % (SEQ.length + 2);
+    const sel = SEQ.slice(0, Math.min(step, SEQ.length));
+    const lastTap = step >= 1 && step <= SEQ.length ? SEQ[step - 1] : -1;
+    const fx = (key) => React.createElement(React.Fragment, { key },
+      React.createElement('div', { style: { position: 'absolute', inset: 0, borderRadius: '50%', border: '1.5px solid #E6007E', animation: 'burst .7s ease-out both' } }),
+      React.createElement('div', { style: { position: 'absolute', inset: 0, borderRadius: '50%', background: 'rgba(230,0,126,.35)', animation: 'burst .9s .1s ease-out both' } }),
+      ...[0, 72, 144, 216, 288].map(r => React.createElement('div', { key: r, style: { position: 'absolute', left: 6, top: 6, width: 3, height: 3, borderRadius: '50%', background: r % 144 === 0 ? '#FFE500' : '#E6007E', '--r': r + 'deg', animation: 'sparkle .8s .05s ease-out both' } })),
+      React.createElement('div', { style: { position: 'absolute', right: -2, top: -9, fontSize: 7, fontWeight: 800, color: '#E6007E', whiteSpace: 'nowrap', textShadow: '0 0 4px #fff', animation: 'ptsUp 1.1s ease-out both' } }, '+125 pts'));
+    const previewItems = PV.map((p, i) => { const on = sel.includes(i); const tapped = i === lastTap; return { name: p.name, price: `$${p.price.toFixed(2)}`, old: `$${p.old.toFixed(2)}`, save: `${t.list.previewSave} $${(p.old - p.price).toFixed(2)}`, bg: on ? '#E6007E' : '#fff', ring: on ? '#E6007E' : '#ddd8e0', tick: on ? '#fff' : '#ddd8e0', border: on ? '#E6007E' : '#ece7ef', saveDisp: on ? 'flex' : 'none', anim: tapped ? 'tapPulse .5s ease both' : 'none', fx: tapped ? fx('fx' + previewTick) : null }; });
+    const selN = sel.length;
+    const previewTotal = `$${sel.reduce((a, i) => a + (PV[i].old - PV[i].price), 0).toFixed(2)}`;
+    const previewPts = String(selN * 125);
+    const previewSelected = `${selN} ${t.list.previewSelected}`;
+    const CONF = ['#E6007E','#FFE500','#FF3D9C','#fff','#E6007E','#FFE500','#FF3D9C','#fff','#E6007E','#FFE500','#FF3D9C','#fff'];
+    const phoneFx = lastTap < 0 ? null : React.createElement(React.Fragment, { key: 'pfx' + previewTick },
+      React.createElement('div', { style: { position: 'absolute', inset: -30, borderRadius: '50%', background: 'radial-gradient(circle, rgba(230,0,126,.6), rgba(230,0,126,0) 70%)', animation: 'phoneGlow 1s ease-out both' } }),
+      ...CONF.map((c, i) => { const a = (i / CONF.length) * Math.PI * 2, d = 90 + (i % 3) * 25; return React.createElement('div', { key: i, style: { position: 'absolute', left: '50%', top: '45%', width: i % 2 ? 6 : 4, height: i % 2 ? 3 : 4, borderRadius: i % 2 ? 1 : '50%', background: c, '--dx': Math.cos(a) * d + 'px', '--dy': Math.sin(a) * d - 20 + 'px', '--rot': (i * 137) + 'deg', animation: `confetti ${0.9 + (i % 4) * 0.15}s ease-out both` } }); }));
+    const ptsAnim = lastTap >= 0 ? 'tapPulse .5s .15s ease both' : 'none';
+    const previewShift = `${-Math.max(0, lastTap - 1) * 44}px`;
+    const doneCount = items.filter(i => i.done).length;
+    const toggle = (id) => () => { this.setState(s => ({ items: s.items.map(i => i.id === id ? { ...i, done: !i.done } : i) }), () => this.persist()); };
+    const remove = (id) => (e) => { e.stopPropagation(); this.setState(s => ({ items: s.items.filter(i => i.id !== id) }), () => this.persist()); };
+    const addItem = () => {
+      const name = this.state.newItem.trim(); if (!name) return;
+      const low = name.toLowerCase(); const em = (EMOJI.find(([k]) => low.includes(k)) || [0, '🛒'])[1];
+      this.setState(s => ({ items: [...s.items, { id: Date.now(), name, emoji: em, done: false }], newItem: '' }), () => this.persist());
+    };
+    const digits = this.state.phone.replace(/\D/g, '');
+    const phoneOk = digits.length === 10 || (digits.length === 11 && digits[0] === '1');
+    const setLang = (l) => () => this.setState({ lang: l }, () => this.persist());
+    return {
+      t, cards, previewItems, previewTotal, previewPts, previewSelected, previewShift, ptsAnim, phoneFx,
+      enBg: en ? '#fff' : '#E6007E', enFg: en ? '#6b6479' : '#fff', esBg: en ? '#E6007E' : '#fff', esFg: en ? '#fff' : '#6b6479',
+      setEn: setLang('en'), setEs: setLang('es'),
+      toggleMenu: () => this.setState(s => ({ menuOpen: !s.menuOpen })),
+      menuOpen: this.state.menuOpen,
+      menuItems: t.menu.map((label, i) => ({ label, onTap: () => { this.setState({ menuOpen: false }); soon(label)(); } })),
+      openList: soon(t.list.title), closeList: () => this.setState({ listOpen: false }), listOpen: this.state.listOpen,
+      items: items.map(i => ({ ...i, toggle: toggle(i.id), remove: remove(i.id), bg: i.done ? '#fff0f7' : '#fff', border: i.done ? '#f8cfe3' : '#ece7ef', boxBg: i.done ? '#E6007E' : '#fff', op: i.done ? 1 : 0, color: i.done ? '#9a95a0' : '#111', deco: i.done ? 'line-through' : 'none' })),
+      progressText: t.sheet.progress(doneCount, items.length), progressPct: items.length ? `${Math.round(doneCount / items.length * 100)}%` : '0%',
+      allDone: items.length > 0 && doneCount === items.length,
+      newItem: this.state.newItem, onNewItem: (e) => this.setState({ newItem: e.target.value }), onKey: (e) => { if (e.key === 'Enter') addItem(); }, addItem,
+      name: this.state.name, onName: (e) => this.setState({ name: e.target.value }),
+      phone: this.state.phone, onPhone: (e) => this.setState({ phone: e.target.value, phoneErr: false }),
+      phoneBorder: this.state.phoneErr ? '#e0245e' : '#e6e0ea', phoneHintColor: this.state.phoneErr ? '#e0245e' : '#8a8395', phoneHint: this.state.phoneErr ? t.form.phoneBad : t.form.phoneReq,
+      submit: () => { if (!phoneOk) { this.setState({ phoneErr: true }); return; } this.setState({ subscribed: true }); },
+      subscribed: this.state.subscribed, notSubscribed: !this.state.subscribed,
+      share: async () => { try { if (navigator.share) await navigator.share({ title: 'Fine Fare', url: location.href }); else { await navigator.clipboard.writeText(location.href); this.showToast(t.shared); } } catch (e) {} },
+      toast: this.state.toast,
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+Sweepstouch · Demo estática Pre-RCS + Premios
+=============================================
+1. Doble clic en index.html (se abre en Chrome/Edge/Brave).
+2. No necesita internet ni backend: todo es estático.
+   (Con internet carga las fuentes Outfit/Inter; sin internet usa la del sistema.)
+3. Para verla como celular: F12 → icono de dispositivo → 430 px de ancho, o simplemente
+   achicá la ventana. La demo se centra sola en pantallas grandes.
+
+Recorrido sugerido para la demo:
+  Nombre → regalo de 100 pts → elegir ofertas (burbujas de ahorro/puntos) → "Validar mis
+  puntos" → "Escanear mi recibo" (si no hay cámara, la demo dibuja un recibo) → escaneo IA →
+  puntos acreditados → encuesta completa (+50) → banner flotante → encuesta rápida (+25) →
+  "Mi lista" (detalles, editar, borrar) → chip de puntos → Premios → Redimir → stepper del
+  perfil (+10 por paso) → QR de retiro → "Demo · simular escaneo en caja" → entregado.
+
+Datos: catálogo real de Antillana Meat Market (23 ofertas con foto) y 3 premios reales.
+El estado vive en memoria: al recargar la página vuelve a empezar.
